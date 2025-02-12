@@ -1,31 +1,33 @@
-const EMBEDDINGSModel = require("./../models/embeddings.model");
+const EMBEDDINGSModel = require("./../models/embeddings.model")
 
+const CreateNewChunkEntryService = async (text, source, sourceId, chunkNumber)=>{
+    try{
 
-// CreateNewChunkEntryService - This service will create a new entry for the chunk in the embeddings collection of mongoDB.
-const CreateNewChunkEntryService = async (text, source, sourceId, chunkNumber) => {
-    try {
-        const Chunk = await EMBEDDINGSModel.create({ // Create new entry for the chunk in the embeddings collection of mongoDB.
-            text: text,
-            source: source,
-            source_id: sourceId,
-            chunk_no: chunkNumber
+        const Chunk = await EMBEDDINGSModel.create({
+            text : text,
+            source : source,
+            source_id : sourceId,
+            chunk_no : chunkNumber
         })
 
-        if (Chunk) { // If the entry is created successfully then return the chunk details.
+        if(Chunk){
             return {
-                success: true,
-                data: Chunk
+                success : true,
+                data : Chunk
             }
-        } else {
-            console.log(`Unable to create entry for chunk in embeddings collection of mongoDB`);
-
+        }else{
+            throw new Error('Unable to create new Chunk entry in embeddings collection of mongoDB')
         }
-    } catch (err) {
-        console.log(`Error in CreateNewChunkEntryService with error - ${err}`);
+
+    }catch(err){
+        console.log(`Error in CreateNewChunkEntryService with err : ${err}`)
         return {
-            success: false,
-            message: err.message
+            success : false,
+            message : err.message
         }
     }
 }
-module.exports = CreateNewChunkEntryService;
+
+module.exports = {
+   CreateNewChunkEntryService
+}
